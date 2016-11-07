@@ -2,6 +2,12 @@ import express from 'express';
 
 const app = express();
 
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
+
 app.get('/task2B', (req, res) => {
   const fullName = req.query.fullname;
   const re = /([^\x00-\x7F]|\w)+/g;
@@ -13,7 +19,7 @@ app.get('/task2B', (req, res) => {
       .filter((name, index) => index !== matches.length - 1)
       .map(name => `${name.charAt(0)}. `).join('');
 
-    res.send(formattedName);
+    res.send(formattedName.slice(0, -1));
   } else {
     res.send('Invalid fullname');
   }
